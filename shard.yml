@@ -1,0 +1,16 @@
+name: build_dict
+version: 0.1.0
+
+authors:
+  - NPN <me@npn.am>
+
+targets:
+  prepare-data:
+    main: src/prepare-data.cr
+
+  call-gemini:
+    main: src/call-gemini.cr
+
+crystal: '>= 1.19.1'
+
+license: MIT
