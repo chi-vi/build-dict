@@ -2,6 +2,7 @@ require "json"
 require "yaml"
 require "colorize"
 require "http/client"
+require "wait_group"
 
 struct Config
   include YAML::Serializable
@@ -9,6 +10,7 @@ struct Config
   getter endpoint : String
   getter api_key : String
   getter model : String = "gemini-3-pro-low"
+  getter conns : Int32 = 3
 
   def openai_headers
     HTTP::Headers{
@@ -21,14 +23,16 @@ struct Config
     "#{endpoint}/v1/chat/completions"
   end
 
-  def call_openai(body : String)
+  def call_openai(body : String, label : String) : String
     HTTP::Client.post(openai_endpoint, headers: openai_headers, body: body) do |resp|
       output = resp.body_io.gets_to_end
       case output
       when .blank?
-        raise "Empty response from API"
+        raise "<#{label}> Empty response from API."
+      when .starts_with?("{\"id\":\"chatcmpl-unknown\"")
+        raise "<#{label}> Empty response from API."
       when .starts_with?("{\"error\"")
-        raise "API Error: #{output}"
+        raise "<#{label}> API Error: #{output}"
       else
         output
       end
@@ -63,26 +67,54 @@ MAP_EXT = {
 
 CONFIG = Config.load("config.yml")
 
-def call_api(ipath : String)
+def call_api(ipath : String, label : String)
   opath = ipath.sub(".zh.txt", MAP_EXT[CONFIG.model])
 
   if File.file?(opath)
-    Log.info { "Skipped #{opath}, already exists.".colorize.blue }
+    Log.info { "<#{label}> Skipped #{opath}, already exists.".colorize.blue }
     return
   end
 
-  Log.info { "Processing #{ipath}, model: #{CONFIG.model}" }
+  Log.info { "<#{label}> Processing #{ipath}, model: #{CONFIG.model}" }
   ibody = CONFIG.openai_body(File.read(ipath))
 
   time_span = Time.measure do
-    output = CONFIG.call_openai(ibody)
+    output = CONFIG.call_openai(ibody, label)
     File.write(opath, output)
-    Log.info { "Output written to #{opath}".colorize.green }
+    Log.info { "<#{label}> Output written to #{opath}".colorize.green }
   rescue ex
-    Log.error { "Error processing #{ipath}: #{ex.message}".colorize.red }
+    Log.error { "<#{label}> Error processing #{ipath}: #{ex.message}".colorize.red }
   end
 
   Log.info { "Time taken: #{time_span.total_seconds} seconds".colorize.yellow }
+end
+
+def call_all(queue : Array(String), conns = 4)
+  qsize = queue.size
+  conns = {conns, qsize}.min
+
+  inp_ch = Channel({String, String}).new(qsize)
+  res_wg = WaitGroup.new(qsize)
+
+  spawn do
+    queue.each_with_index(1) do |fpath, index|
+      inp_ch.send({fpath, "#{index}/#{qsize}"})
+    end
+  end
+
+  conns.times do
+    spawn do
+      loop do
+        call_api(*inp_ch.receive)
+      rescue ex
+        Log.error(exception: ex) { ex.message.colorize.red }
+      ensure
+        res_wg.done
+      end
+    end
+  end
+
+  res_wg.wait
 end
 
 if ARGV.size == 0
@@ -93,8 +125,5 @@ end
 ARGV.each do |iname|
   files = Dir.glob("data/#{iname}/*.zh.txt")
   files.sort_by! { |x| File.basename(x, ".zh.txt").to_i }
-
-  files.each do |fpath|
-    call_api(fpath)
-  end
+  call_all(files, CONFIG.conns)
 end
