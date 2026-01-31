@@ -74,8 +74,8 @@ Chỉ xuất ra một bảng Markdown duy nhất. Không giải thích thêm.
 Cấu trúc bảng:
 
 | Cụm từ tiếng Trung | Từ loại (PKU) | Nghĩa tiếng Việt tương ứng |
-| :----------------- | :------------ | :------------------------- |
-| ...                | ...           | ...                        |
+|:-------------------|:--------------|:---------------------------|
+| ... | ... | ... |
 
 # **VÍ DỤ MẪU (FEW-SHOT EXAMPLES)**
 
@@ -84,37 +84,37 @@ Cấu trúc bảng:
 **Output:**
 
 | Cụm từ tiếng Trung | Từ loại (PKU) | Nghĩa tiếng Việt tương ứng |
-| :----------------- | :------------ | :------------------------- |
-| 我                 | r             | tôi                        |
-| 爱                 | v             | yêu                        |
-| 北京               | ns            | Bắc Kinh                   |
-| 天安门             | ns            | Thiên An Môn               |
-| 。                 | w             | .                          |
+|:-------------------|:--------------|:---------------------------|
+| 我 | r | tôi |
+| 爱 | v | yêu |
+| 北京 | ns | Bắc Kinh |
+| 天安门 | ns | Thiên An Môn |
+| 。 | w | . |
 
 **Input:**
 解决这个困难需要时间。
 **Output:**
 
 | Cụm từ tiếng Trung | Từ loại (PKU) | Nghĩa tiếng Việt tương ứng |
-| :----------------- | :------------ | :------------------------- |
-| 解决               | v             | giải quyết                 |
-| 这个               | r             | cái... này                 |
-| 困难               | an            | khó khăn                   |
-| 需要               | v             | cần                        |
-| 时间               | n             | thời gian                  |
-| 。                 | w             | .                          |
+|:-------------------|:--------------|:---------------------------|
+| 解决 | v | giải quyết |
+| 这个 | r | cái... này |
+| 困难 | an | khó khăn |
+| 需要 | v | cần |
+| 时间 | n | thời gian |
+| 。 | w | . |
 
 **Input:**
 他高兴地说。
 **Output:**
 
-| Cụm từ tiếng Trung | Từ loại (PKU) | Nghĩa tiếng Việt tương ứng |
-| :----------------- | :------------ | :------------------------- |
-| 他                 | r             | anh ấy                     |
-| 高兴               | a             | vui vẻ                     |
-| 地                 | u             | mà                         |
-| 说                 | v             | nói                        |
-| 。                 | w             | .                          |
+| Cụm từ tiếng Trung | Từ loại | Nghĩa tiếng Việt tương ứng |
+|:-------------------|:--------|:---------------------------|
+| 他 | r | anh ấy |
+| 高兴 | a | vui vẻ |
+| 地 | u | mà |
+| 说 | v | nói |
+| 。 | w | . |
 
 # **BẮT ĐẦU NHIỆM VỤ**
 
