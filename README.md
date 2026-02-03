@@ -62,23 +62,49 @@ Công cụ `call-gemini` xử lý các phần dữ liệu đã chuẩn bị bằ
 **Cú pháp:**
 
 ```sh
-./bin/call-gemini <folder_dữ_liệu>
+./bin/call-gemini [options] <folder_dữ_liệu> [folder_dữ_liệu...]
 ```
+
+**Options:**
+
+| Option | Mô tả | Mặc định |
+|--------|-------|----------|
+| `-c PATH` | Đường dẫn đến file config YAML | `config.yml` |
+| `-w CONNS` | Số lượng kết nối đồng thời | `3` |
+| `-m MODEL` | Model sử dụng | `gemini-3-pro-low` |
+| `-t TEMPERATURE` | Giá trị temperature | `0.4` |
+| `-r REASONING_LEVEL` | Mức độ reasoning | `minimal` |
+| `-f MIN` | Chỉ số file tối thiểu để xử lý | `0` |
+| `-u MAX` | Chỉ số file tối đa để xử lý (-1 = không giới hạn) | `-1` |
+
+**Các model được hỗ trợ:**
+
+- `gemini-3-flash` → `.3ft.json`
+- `gemini-3-pro-high` → `.3ph.json`
+- `gemini-3-pro-low` → `.3pl.json`
+- `gemini-2.5-flash` → `.25f.json`
 
 **Ví dụ:**
 
 ```sh
+# Xử lý với cấu hình mặc định
 ./bin/call-gemini data/my_dataset
+
+# Xử lý với model khác và nhiều kết nối hơn
+./bin/call-gemini -m gemini-3-flash -w 5 data/my_dataset
+
+# Xử lý một phạm vi file cụ thể (từ file 10 đến 20)
+./bin/call-gemini -f 10 -u 20 data/my_dataset
+
+# Sử dụng file config khác
+./bin/call-gemini -c custom_config.yml data/my_dataset
+
+# Xử lý nhiều bộ dữ liệu cùng lúc
+./bin/call-gemini dataset1 dataset2
 ```
 
 Lệnh này sẽ:
 
-1.  Đọc các file từ `data/my_dataset/*.zh.txt`.
+1.  Đọc các file từ `<folder>/*.zh.txt`.
 2.  Gửi nội dung đến API.
-3.  Lưu phản hồi vào cùng thư mục với phần mở rộng mới dựa trên model (ví dụ: `.3pl.json` cho `gemini-3-pro-low`).
-
-Bạn cũng có thể xử lý nhiều bộ dữ liệu cùng lúc:
-
-```sh
-./bin/call-gemini dataset1 dataset2
-```
+3.  Lưu phản hồi vào cùng thư mục với phần mở rộng mới dựa trên model.

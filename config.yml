@@ -1,4 +1,2 @@
 endpoint: http://localhost:8045
 api_key: sk-xxxxxx
-model: gemini-3-pro-low
-conns: 3
