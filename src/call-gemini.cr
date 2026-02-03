@@ -27,9 +27,9 @@ struct Config
     HTTP::Client.post(openai_endpoint, headers: openai_headers, body: body) do |resp|
       output = resp.body_io.gets_to_end
       case output
-      when .blank?
-        raise "<#{label}> Empty response from API."
-      when .starts_with?("{\"id\":\"chatcmpl-unknown\"")
+      when .blank?,
+           .starts_with?("Token error"),
+           .starts_with?("{\"id\":\"chatcmpl-unknown\"")
         raise "<#{label}> Empty response from API."
       when .starts_with?("{\"error\"")
         raise "<#{label}> API Error: #{output}"
@@ -118,12 +118,12 @@ def call_all(queue : Array(String), conns = 4)
 end
 
 if ARGV.size == 0
-  puts "Usage: call-gemini <input_name1> [<input_name2> ...]"
+  puts "Usage: call-gemini <input_dir1> [<input_dir2> ...]"
   exit 1
 end
 
-ARGV.each do |iname|
-  files = Dir.glob("data/#{iname}/*.zh.txt")
+ARGV.each do |i_dir|
+  files = Dir.glob("#{i_dir}/*.zh.txt")
   files.sort_by! { |x| File.basename(x, ".zh.txt").to_i }
   call_all(files, CONFIG.conns)
 end

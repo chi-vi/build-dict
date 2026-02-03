@@ -3,8 +3,7 @@ def write_file(input : String, fpath : String)
   puts "Written #{input.size} chars to #{fpath}"
 end
 
-def extract(ipath : String, oname : String)
-  o_dir = "data/#{oname}"
+def extract(ipath : String, o_dir : String)
   Dir.mkdir_p(o_dir)
 
   count = 0
@@ -35,7 +34,7 @@ def extract(ipath : String, oname : String)
 end
 
 if ARGV.size != 2
-  puts "Usage: prepare-data <input_file> <output_name>"
+  puts "Usage: prepare-data <input_file> <output_dir>"
   exit 1
 end
 

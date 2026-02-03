@@ -44,13 +44,13 @@ Công cụ `prepare-data` chia một file văn bản đầu vào lớn thành c�
 **Cú pháp:**
 
 ```sh
-./bin/prepare-data <file_đầu_vào> <tên_đầu_ra>
+./bin/prepare-data <file_đầu_vào> <folder_đầu_ra>
 ```
 
 **Ví dụ:**
 
 ```sh
-./bin/prepare-data raw_text.txt my_dataset
+./bin/prepare-data raw_text.txt data/my_dataset
 ```
 
 Lệnh này sẽ tạo thư mục `data/my_dataset/` và điền vào đó các file văn bản đã chia nhỏ (ví dụ: `0.zh.txt`, `1.zh.txt`, ...).
@@ -62,13 +62,13 @@ Công cụ `call-gemini` xử lý các phần dữ liệu đã chuẩn bị bằ
 **Cú pháp:**
 
 ```sh
-./bin/call-gemini <tên_bộ_dữ_liệu>
+./bin/call-gemini <folder_dữ_liệu>
 ```
 
 **Ví dụ:**
 
 ```sh
-./bin/call-gemini my_dataset
+./bin/call-gemini data/my_dataset
 ```
 
 Lệnh này sẽ:
