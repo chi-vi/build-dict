@@ -47,7 +47,7 @@ struct Endpoint
         {role: "system", content: SYSTEM_PROMPT},
         {role: "user", content: content},
       ],
-      temperature: temperature, reasoning: {effort: reasoning_effort},
+      temperature: temperature, reasoning_effort: reasoning_effort,
     }.to_json
   end
 end
@@ -124,7 +124,7 @@ class CallGemini
     end
 
     Log.info { "<#{label}> Processing #{ipath}, model: #{@model}" }
-    ibody = @endpoint.openai_body(File.read(ipath))
+    ibody = @endpoint.openai_body(File.read(ipath), model: @model, temperature: @temperature, reasoning_effort: @reasoning_effort)
 
     time_span = Time.measure do
       output = @endpoint.call_openai(ibody, label)
