@@ -70,10 +70,12 @@ class CallGemini
   getter f_max = -1
 
   MAP_EXT = {
-    "gemini-3-flash"    => ".3ft.json",
-    "gemini-3-pro-high" => ".3ph.json",
-    "gemini-3-pro-low"  => ".3pl.json",
-    "gemini-2.5-flash"  => ".25f.json",
+    "gemini-3-flash"            => ".3ft.json",
+    "gemini-3-pro-high"         => ".3ph.json",
+    "gemini-3-pro-low"          => ".3pl.json",
+    "gemini-2.5-flash"          => ".25f.json",
+    "gemini-2.5-flash-lite"     => ".25l.json",
+    "gemini-2.5-flash-thinking" => ".25t.json",
   }
 
   def initialize(env = ENV)

@@ -11,6 +11,10 @@ targets:
   call-gemini:
     main: src/call-gemini.cr
 
+dependencies:
+  zh-chardet:
+    github: chi-vi/zh-chardet.cr
+
 crystal: '>= 1.19.1'
 
 license: MIT

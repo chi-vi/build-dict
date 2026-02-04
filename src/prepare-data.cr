@@ -1,3 +1,5 @@
+require "zh-chardet"
+
 def write_file(input : String, fpath : String)
   File.write(fpath, input)
   puts "Written #{input.size} chars to #{fpath}"
@@ -12,7 +14,7 @@ def extract(ipath : String, o_dir : String)
 
   sbuff = String::Builder.new
 
-  File.each_line(ipath) do |line|
+  ZhChardet.read_file(ipath).each_line do |line|
     line = line.strip
     next if line.empty?
 
